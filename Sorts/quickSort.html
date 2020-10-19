@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick</title>
+</head>
+<body>
+    <label for="swaps">Swaps: </label>
+    <div id="swaps">0</div>   <br>
+    <label for="comp">Comparisons: </label>
+    <div id="comp">0</div> 
+    <canvas id="canvasBubble" width="820" height="500" style="border:1px solid #d3d3d3;"></canvas>
+    <script>
+        
+        function init(x_0, y_0, actualList, actualValues){
+            actualList = [];
+            actualValues = [];
+            for (let i = 0; i < 40; i++) {
+                let a =  Math.floor(Math.random() * 450);  
+                actualValues.push(a);
+                actualList.push([x_0+20*i, y_0, 20, -a, i]);
+            }
+            return [actualList, actualValues];
+        }
+        
+        function draw(actualList, actualContext){
+            actualList.forEach(element => {
+                actualContext.rect(element[0],element[1], element[2], element[3]);
+                actualContext.stroke();
+            });
+        }
+
+        audio = new Audio('beep3.wav');
+
+        function play(){
+            audio.play();
+        }
+
+        function stop(){
+            audio.pause();
+        }
+
+        c = document.getElementById("canvasBubble");
+        context = c.getContext("2d");
+        list = [];
+        values = [];
+        let partLow = 0;
+        let partHigh = 0;
+        context.beginPath();
+        context.lineWidth = "2";
+        context.strokeStyle = "black";
+        list = [];
+        values = [];
+        let swaps = 0, comps = 0;
+        temp = init(5, 490, list, values);
+        list = temp[0];
+        values = temp[1];
+        main();
+        
+        async function main(){
+            await sort(0, values.length-1);
+            values.forEach(element => {
+                console.log(element);
+            });
+            draw(list, context);
+        }
+        async function colour(colour, i, actualContext, actualList){
+            actualContext.beginPath();
+            actualContext.fillStyle = colour;
+            actualContext.rect(actualList[i][0],actualList[i][1],actualList[i][2],actualList[i][3]);
+            actualContext.fill();
+            actualContext.lineWidth = "2";
+            actualContext.strokeStyle = "black";
+            actualContext.stroke();
+        }
+
+        async function clearColour(colour, i, actualContext, actualList){
+            actualContext.beginPath();
+            actualContext.fillStyle = colour;
+            actualContext.rect(actualList[i][0],actualList[i][1],actualList[i][2],actualList[i][3]);
+            actualContext.fill();
+            actualContext.lineWidth = "0";
+            actualContext.strokeStyle = "white";
+            actualContext.stroke();
+        }
+
+        async function sort(low, high){
+            if (low<high){
+                let partIndex = await partition(low, high);
+                await sort(low, partIndex-1);
+                await sort(partIndex+1, high);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function swap(i, j){
+            swaps +=1;
+            document.getElementById("swaps").innerHTML = swaps;
+            colour("red", i, context, list);
+            colour("blue", j, context, list);
+            play();
+            await sleep(50);
+            stop();
+            context.beginPath();
+            context.clearRect(0, 0, 820, 500); 
+            let temp = values[j];
+            values[j] = values[i]
+            values[i] = temp;
+            temp = list[j][3];
+            list[j][3] = list[i][3];
+            list[i][3] = temp;   
+            context.beginPath();
+            context.lineWidth = "2";
+            context.strokeStyle = "black";
+            draw(list, context);
+            colour("yellow", partLow, context, list);
+            colour("yellow", partHigh, context, list);
+        }
+
+        async function partition(low, high){
+            let pivot = values[high];
+            let index = low;
+            for (let j = low; j < high; j++) {
+                comps +=1;
+                document.getElementById("comp").innerHTML = comps;
+                if (values[j]<pivot){
+                    await swap(index, j);
+                    await sleep(50);
+                    index++;
+                }
+            }
+            await swap(index, high);
+            await sleep(50);
+            partHigh = index;
+            partLow = low;
+            return index;
+        }
+   
+</script>
+</body>
+</html>

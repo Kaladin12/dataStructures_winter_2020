@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort</title>
+</head>
+<body>
+    <label for="comp">Comparisons: </label>
+    <div id="comp">0</div> 
+    <canvas id="canvasBubble" width="820" height="500" style="border:1px solid #d3d3d3;"></canvas>
+    <script>
+        
+        function init(x_0, y_0, actualList, actualValues){
+            actualList = [];
+            actualValues = [];
+            for (let i = 0; i < 40; i++) {
+                let a =  Math.floor(Math.random() * 450);  
+                actualValues.push(a);
+                actualList.push([x_0+20*i, y_0, 20, -a, i]);
+            }
+            return [actualList, actualValues];
+        }
+        
+        function draw(actualList, actualContext){
+            actualList.forEach(element => {
+                actualContext.rect(element[0],element[1], element[2], element[3]);
+                actualContext.stroke();
+            });
+        }
+
+        audio = new Audio('beep3.wav');
+
+        function play(){
+            audio.play();
+        }
+
+        function stop(){
+            audio.pause();
+        }
+
+        c = document.getElementById("canvasBubble");
+        context = c.getContext("2d");
+        list = [];
+        values = [];
+        let partLow = 0;
+        let partHigh = 0;
+        let comps =0;
+        context.beginPath();
+        context.lineWidth = "2";
+        context.strokeStyle = "black";
+        list = [];
+        values = [];
+        temp = init(5,490, list, values);
+        list = temp[0];
+        values = temp[1];
+        main();
+        
+        async function main(){
+            await sort(0, values.length-1);
+            console.log(values);
+            console.log(list);
+            /*values.forEach(element => {
+                console.log(element);
+            });*/
+            draw(list, context);
+        }
+        
+        async function colour(colour, i, actualContext, actualList){
+            actualContext.beginPath();
+            actualContext.fillStyle = colour;
+            actualContext.rect(actualList[i][0],actualList[i][1],actualList[i][2],actualList[i][3]);
+            actualContext.fill();
+            actualContext.lineWidth = "2";
+            actualContext.strokeStyle = "black";
+            actualContext.stroke();
+        }
+
+        async function clearColour(colour, i, actualContext, actualList){
+            actualContext.beginPath();
+            actualContext.fillStyle = colour;
+            actualContext.rect(actualList[i][0],actualList[i][1],actualList[i][2],actualList[i][3]);
+            actualContext.fill();
+            actualContext.lineWidth = "0";
+            actualContext.strokeStyle = "white";
+            actualContext.stroke();
+        }
+
+        async function sort(left, right){
+            if (left<right){
+                let mid =parseInt((right+left)/2);
+                //console.log(mid);
+                await sort(left, mid);
+                await sort(mid+1, right);
+                await merge(left, mid, right);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function swap(i,j,k ){
+            colour("red", i, context, list);
+            colour("blue", j, context, list);
+            colour("green", k, context, list);
+            play();
+            await sleep(50);
+            stop();
+            context.beginPath();
+            context.clearRect(0, 0, 820, 500); 
+            context.beginPath();
+            context.lineWidth = "2";
+            context.strokeStyle = "black";
+            draw(list, context);
+            //colour("yellow", partLow, context, list);
+            //colour("yellow", partHigh, context, list);
+        }
+
+        async function merge(left, mid, right){
+            let help = [], help2 = [];
+            for (let i = left; i <= right; i++) {
+                help[i] = values[i];
+                help2[i] = list[i];
+            }
+            let i = left;
+            let j = mid+1;
+            let k = left;
+            while (i<=mid && j<=right) {
+                comps +=1;
+                document.getElementById("comp").innerHTML = comps;
+                if(help[i]<=help[j]){
+                    values[k] = help[i];
+                    swap(i,j, k);
+                    await sleep(50);
+                    list[k] = help2[i];
+                    list[k][0] = 5+20*k;
+                    swap(i, j, k);
+                    await sleep(50);
+                    i++;
+                }
+                else{
+                    values[k] = help[j];
+                    swap(j,i, k);
+                    await sleep(50);
+                    list[k] = help2[j];
+                    list[k][0] = 5+20*k;
+                    swap(j,i, k);
+                    await sleep(50);
+                    j++;
+                }
+                //colour("green", k, context, list);
+                k++;
+            }
+            while(i<=mid){
+                comps +=1;
+                document.getElementById("comp").innerHTML = comps;
+                values[k] = help[i];
+                swap(i, j, k);
+                await sleep(50);
+                list[k] = help2[i];
+                list[k][0] = 5+20*k;
+                swap(i, j, k);
+                await sleep(50);
+                //colour("green", k, context, list);
+                k++;
+                i++;
+            }
+            while(j<=mid){
+                comps +=1;
+                document.getElementById("comp").innerHTML = comps;
+                values[k] = help[j];
+                swap(i,j, k);
+                await sleep(50);
+                list[k] = help2[j];
+                list[k][0] = 5+20*k;
+                swap(j,i, k);
+                    await sleep(50);
+                //colour("green", k, context, list);
+                k++;
+                j++;
+            }
+        }
+   
+</script>
+</body>
+</html>

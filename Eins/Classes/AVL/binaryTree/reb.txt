@@ -1,0 +1,95 @@
+public Node<T> rebalanceMain(Node<T> node, int difference){
+        if (this.root==node){
+
+        }
+        Node<T> parent = getParent(this.root, node.getValue());
+        if (difference>0){ //lado izquierdo
+            if (node.getLeftSon().getLeftSon()!=null){
+                Node<T> temp = node;
+                node = node.getLeftSon();
+                node.setRightSon(temp);
+                node.getRightSon().setLeftSon(null);
+                node.getRightSon().setRightSon(null);
+                parent.setLeftSon(node);
+            }
+            else if (node.getRightSon().getLeftSon()!=null){
+                Node<T> temp = node.getRightSon();
+                node.setRightSon(temp.getLeftSon());
+                node.getRightSon().setRightSon(temp);
+                node.getRightSon().getRightSon().setLeftSon(null);
+                node.getRightSon().getRightSon().setRightSon(null);
+                parent.setRightSon(node);
+                node = rebalanceMain(node, -2);
+            }
+    
+        }
+        else{
+            if (node.getRightSon().getRightSon()!=null){
+                Node<T> temp = node;
+                node = node.getRightSon();
+                node.setLeftSon(temp);
+                node.getLeftSon().setLeftSon(null);
+                node.getLeftSon().setRightSon(null);
+                parent.setRightSon(node);
+            }
+            else if (node.getLeftSon().getRightSon()!=null){
+                Node<T> temp = node.getLeftSon();
+                node.setLeftSon(temp.getRightSon());
+                node.getLeftSon().setLeftSon(temp);
+                node.getLeftSon().getLeftSon().setLeftSon(null);
+                node.getLeftSon().getLeftSon().setRightSon(null);
+                parent.setLeftSon(node);
+                node = rebalanceMain(node, 1);
+            }
+        }
+        return node;
+    }
+
+    public int heightOfTree(Node<T> node){
+        if (node==null){
+            return 0;
+        }
+        else{
+            int heightLeft = heightOfTree(node.getLeftSon());
+            int heightRight = heightOfTree(node.getRightSon());
+            if (heightLeft>heightRight) {
+                return heightLeft+1;
+            }
+            else{
+                return heightRight+1;
+            }
+        }
+    }
+
+    public void BFS(Node<T> node){
+        Queue<T> myQueue = new Queue<T>();
+        if  (node != null){
+            myQueue.push(node);
+            Node<T> temp = node;
+            while(!myQueue.empty()){
+                if (temp.getLeftSon()!=null){
+                    myQueue.push(temp.getLeftSon());
+                }
+                if (temp.getRightSon()!=null){
+                    myQueue.push(temp.getRightSon());
+                }
+                Node<T> popped = myQueue.pop();
+                System.out.println(popped.getValue());
+                temp = temp.getNode();
+            }
+        }
+    }
+
+    Node<T> parent = getParent(this.root, node.getValue());
+        if (difference>0){
+            node = rotateRight(node);
+            if (parent.getLeftSon()==node || parent==node)  parent.setLeftSon(node);
+            if (parent.getRightSon()==node) parent.setRightSon(node);
+        }
+        if (difference<0){
+            if (parent.getRightSon()==node || parent==node){
+                node = rotateRight(node);
+                parent.setLeftSon(node);
+            }
+        }
+        return node;
