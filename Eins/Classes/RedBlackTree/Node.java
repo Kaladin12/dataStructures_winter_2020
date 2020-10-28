@@ -1,20 +1,27 @@
-package AVL.binaryTree;
+package RedBlackTree;
 
 public class Node<T> implements Comparable<T> {
     private T value ;
-    private Integer height=-1;
     private Node<T> leftSon, rightSon;
+    private Boolean red = false; //false es negro, true es rojo
     private Node<T> next;
+    private Node<T> parent;
 
     public Node(T value){
         this.value = value;
-        this.leftSon = new Node<T>(null);
-        this.rightSon = new Node<T>(null);
-        this.height  = -1;
+        this.leftSon = null;
+        this.rightSon = null;
         this.next = null;
+        this.parent = null;
     }
 
+    public void setParent(Node<T> node){
+        this.parent = node;
+    }
 
+    public Node<T> getParent(){
+        return this.parent;
+    }
     public void setNext(Node<T> next){
         this.next = next;
     }
@@ -23,20 +30,20 @@ public class Node<T> implements Comparable<T> {
         return this.next;
     }
 
+    public void setColor(Boolean color){
+        this.red = color;
+    }
+
+    public Boolean getColor(){
+        return this.red;
+    }
+
     public T getValue(){
         return this.value;
     }
 
     public void setValue(T value){
         this.value = value;
-    }
-
-    public void setHeight(Integer level){
-        this.height = level;
-    }
-
-    public Integer getHehight(){
-        return this.height;
     }
 
     public void setRightSon(Node<T> rightSon){

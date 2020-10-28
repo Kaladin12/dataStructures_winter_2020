@@ -1,4 +1,4 @@
-package AVL.binaryTree;
+package RedBlackTree;
 
 import java.util.Random;
 
@@ -16,11 +16,6 @@ public class Main {
             ab.insertRecursive(e);
             System.out.println();
         } 
-        //ab.setHeights(ab.root);
-        ab.deleteNode( 20);
-        ab.deleteNode(10);
-        ab.deleteNode(56);
-
         
         /*
         int n = 0; 

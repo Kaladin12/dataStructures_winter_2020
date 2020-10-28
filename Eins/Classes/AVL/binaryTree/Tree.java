@@ -14,6 +14,7 @@ public class Tree<T> {
         }
         else{
             this.root = insertRecursive(this.root, value);
+            setHeights(this.root);
         }
     }
 
@@ -32,7 +33,6 @@ public class Tree<T> {
             setHeights(node);
         }       
         setHeights(node);
-        //int difference = rebalance(node);
         if (rebalance(node)>0){
             if (node.getLeftSon().compareTo(value)>0){
                 return rotateRight(node);
@@ -195,10 +195,20 @@ public class Tree<T> {
 
     public Node<T> deleteSuccessor(Node<T> node){
         if (node.getLeftSon() == null){
-            return node.getRightSon(); //null si no hay derecho y derecho si si lo hay
+            return node.getRightSon(); 
         }
         node.setLeftSon(deleteSuccessor(node.getLeftSon()));
         return node;
+    }
+
+    public void deleteNode(T value){
+        if (this.root == null){
+            this.root = new Node<T>(value);
+        }
+        else{
+            this.root = deleteNode(this.root, value);
+            setHeights(this.root);
+        }
     }
 
     public Node<T> deleteNode(Node<T> node, T value){
@@ -213,6 +223,25 @@ public class Tree<T> {
             node.setRightSon(deleteNode(node.getRightSon(), value));
             height(node);
         }
+        setHeights(node);
+        if (rebalance(node)>0){
+            if (node.getLeftSon().compareTo(value)>0){
+                return rotateRight(node);
+            }
+            if (node.getLeftSon().compareTo(value)<0){
+                node.setLeftSon(rotateLeft(node.getLeftSon()));
+                return rotateRight(node);
+            }
+        }
+        if (rebalance(node)<0){
+            if (node.getRightSon().compareTo(value)<0){
+                return rotateLeft(node);
+            }
+            if (node.getRightSon().compareTo(value)>0){
+                node.setRightSon(rotateRight(node.getRightSon()));
+                return rotateLeft(node);
+            }
+        }
         if (node.compareTo(value)==0){
             if (node.getRightSon()==null){
                 return node.getLeftSon();
@@ -225,6 +254,7 @@ public class Tree<T> {
                 this.root = findSuccessor(temp.getRightSon());
                 this.root.setRightSon(deleteSuccessor(temp.getRightSon()));
                 this.root.setLeftSon(temp.getLeftSon());
+                node = this.root;
             }
             else{
                 node = findSuccessor(temp.getRightSon());
