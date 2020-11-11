@@ -3,7 +3,7 @@ package bTree.queue;
 import bTree.Node;
 
 public class Stack<T> {
-    Node<T> top;
+    public Node<T> top;
     public Stack(){
         this.top = null;
     }
@@ -18,7 +18,6 @@ public class Stack<T> {
             Node<T> temp = this.top;
             this.top = node;
             this.top.setNext(temp);
-            System.out.println();
         } 
     }
     public void push(T newValue){

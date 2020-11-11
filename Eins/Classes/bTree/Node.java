@@ -3,7 +3,8 @@ package bTree;
 import java.util.ArrayList;
 
 public class Node<T> implements Comparable<T> {
-    private T value ;
+    private T value ; 
+    private int deg;
     ArrayList<T> keys;
     ArrayList<Node<T>> children;
     private Integer height;
@@ -11,10 +12,10 @@ public class Node<T> implements Comparable<T> {
 
     private Node<T> next;
 
-    public Node(int value){
-        //this.value =value;
+    public Node(int deg){
+        this.deg = deg;
         this.height  = -1;
-        this.keys = new ArrayList<T>(value);
+        this.keys = new ArrayList<T>(0);
         this.isLeaf = false;
         this.children = null;//new ArrayList<Node<T>>(value+1);
     }
@@ -28,7 +29,26 @@ public class Node<T> implements Comparable<T> {
     }
 
     public void setChild(Node<T> child, int pos){
-        this.children.add(pos, child);
+        if (this.children!=null &&  pos==this.children.size()){
+            ArrayList<Node<T>> temp = this.children;
+            this.children = new ArrayList<Node<T>>(pos);
+            for (int i = 0; i < temp.size(); i++) {
+                this.children.add(i, temp.get(i));
+            }
+            this.children.add(pos,child);
+        }
+        else{
+            //System.out.println(child.keys.size()+"  "+this.deg);
+            if (child.keys.size()<=this.deg)
+             {
+                for (int i = 0; i < this.children.size();i++) {
+                    if (this.children.get(i).keys.size()>this.deg){
+                        this.children.remove(i);
+                    }
+                }
+                this.children.add(pos,child);
+             }
+        }
     }
 
     public Node<T> getChild(int pos){
@@ -52,7 +72,38 @@ public class Node<T> implements Comparable<T> {
     }
 
     public void setValue(T value, int pos){ //pushea a keys
-        this.keys.add(pos, value);
+        if (pos==this.keys.size()){
+            ArrayList<T> temp = this.keys;
+            this.keys = new ArrayList<T>(pos);
+            for (int i = 0; i < temp.size(); i++) {
+                this.keys.add(i, temp.get(i));
+            }
+            this.keys.add(pos,value);
+        }
+        else{
+            if (this.keys.size()+1>this.deg){
+                /*ArrayList<T> temp = this.keys;
+                this.keys = new ArrayList<T>(this.keys.size()+1);
+                for (int i = 0; i <= temp.size(); i++) {
+                    if (i==pos){  this.keys.add(i,value); }
+                    else{
+                        if (this.keys.size()!=0 &&  this.keys.get(pos)!=null){
+                            if (pos==0) {this.keys.add(i, temp.get(i-pos-1));}
+                            else {this.keys.add(i, temp.get(i-pos));}
+                        }
+                        else{
+                            this.keys.add(i, temp.get(i));
+                        }
+                    }
+                } */
+                this.keys.set(pos, value);
+            }
+            else{
+                this.keys.add(pos, value);
+            }
+            
+        }
+        
     }
 
     public void replaceValue(T value, int pos){
@@ -77,7 +128,7 @@ public class Node<T> implements Comparable<T> {
 
     public int callComparable(int n, T value){
         Node<T> temp = new Node<T>(this.keys.get(n));
-        System.out.println(temp.getValue()+" "+value+" "+temp.compareTo(value) );
+        //System.out.println(temp.getValue()+" "+value+" "+temp.compareTo(value) );
         return temp.compareTo(value);
     }
 

@@ -7,12 +7,11 @@ public class Main {
         //Tree<Integer> ab = new Tree<Integer>(3);
         Tree<Integer> myTree = new Tree<Integer>(3);
         Random randy = new Random();
-        Integer[] array = new Integer[]{56,30,70,22,40,60,95,11,3,16,65,63,67};
-
-        myTree.callInsert(12);
-        myTree.callInsert(3);
-        myTree.callInsert(-6);
-        //myTree.callInsert(1);
+        Integer[] array = new Integer[]{56,30,70,22,40,60,95,11,3,16,65,63,67,100,120,130};//,};
+        for (Integer inte : array) {
+            myTree.callInsert(inte);
+        }
+        
         System.out.println();
         
         
