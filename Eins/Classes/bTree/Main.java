@@ -10,8 +10,8 @@ public class Main {
         Integer[] array = new Integer[]{56,30,70,22,40,60,95,11,3,16,65,63,67};
 
         myTree.callInsert(12);
-        //myTree.callInsert(3);
-        //myTree.callInsert(-6);
+        myTree.callInsert(3);
+        myTree.callInsert(-6);
         //myTree.callInsert(1);
         System.out.println();
         

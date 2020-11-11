@@ -26,12 +26,12 @@ public class Tree<T> {
             this.root = new Node<T>(this.degree);
             this.root.setValue(value, 0);
             this.isRootEmpty = false;
-            //this.stackoooooo.pop();
-            //this.stackoooooo.push(this.root);
-            //System.out.println();
+            this.stackoooooo.pop();
+            this.stackoooooo.push(this.root);
+            System.out.println();
         }
         else{
-            //this.stackoooooo.push(this.root);
+            this.stackoooooo.push(this.root);
             if (node.hasChildren()){
                 for (Node<T> child : node.getChildren()) { 
                     if (child.callComparable(0, value)<=0 && child.callComparable(child.keys.size()-1, value)>=0){
