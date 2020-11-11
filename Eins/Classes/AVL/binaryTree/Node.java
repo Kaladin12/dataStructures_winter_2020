@@ -8,8 +8,8 @@ public class Node<T> implements Comparable<T> {
 
     public Node(T value){
         this.value = value;
-        this.leftSon = new Node<T>(null);
-        this.rightSon = new Node<T>(null);
+        this.leftSon = null;
+        this.rightSon =null;
         this.height  = -1;
         this.next = null;
     }

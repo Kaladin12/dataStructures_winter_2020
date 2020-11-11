@@ -199,7 +199,7 @@ public class Tree<T> {
 
     public void preOrdered(Node<T> node){
         if (node != null){
-            System.out.println(node.getValue());
+            System.out.println(node.getValue() + "  " + node.getColor());
             this.preOrdered(node.getLeftSon());
             this.preOrdered(node.getRightSon());
         }

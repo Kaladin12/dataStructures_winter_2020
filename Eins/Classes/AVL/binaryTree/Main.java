@@ -6,8 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Tree<Integer> ab = new Tree<Integer>();
         Random randy = new Random();
-        Integer[] array = new Integer[]{56,30,70,22,40,60,95,11,3,16,65,63,67,2,25,20,36,10,23,5};
-        //{12,5,15,3,7,13,17,1,9,14,20,8,11,18,21};
+        Integer[] array = new Integer[]{10,20,30,40,50,47,85,2,34};      //{12,5,15,3,7,13,17,1,9,14,20,8,11,18,21};
         //{7,3,11,1,5,9,13,4,6,8,12,14,73};
         //{10,6,20,4,8,15,21,11,16,22,14,17};
         //{30,60,45,15,7,22,75,17,27};
@@ -17,9 +16,7 @@ public class Main {
             System.out.println();
         } 
         //ab.setHeights(ab.root);
-        ab.deleteNode( 20);
-        ab.deleteNode(10);
-        ab.deleteNode(56);
+        ab.preOrder();
 
         
         /*
