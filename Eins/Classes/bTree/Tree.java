@@ -114,7 +114,7 @@ public class Tree<T> {
                 //this.partitionNode(node, this.findPosOfPart(node));
             };
         }
-        else  {
+        else if (!node.hasChildren()){
             T temp = node.getValue(posOfPart);
             Node<T> left = new Node<T>(this.degree), right = new Node<T>(this.degree);
             //ArrayList<Node<T>> futureChildren = new ArrayList<Node<T>>(this.degree+1);
@@ -143,27 +143,47 @@ public class Tree<T> {
             }
             //
         }
-        /*else{
+        else{
             T temp = node.getValue(posOfPart);
             Node<T> left = new Node<T>(this.degree), right = new Node<T>(this.degree);
-            ArrayList<Node<T>> futureChildren =  node.getChildren();
+            //ArrayList<Node<T>> futureChildren = new ArrayList<Node<T>>(this.degree+1);
             for (int i = 0; i < posOfPart; i++) {
                 left.setValue(node.getValue(i), i);
             }
-            int j = node.keys.size() - posOfPart + 1, k=0;//, i = node.keys.size()-posOfPart;
+            int j = node.keys.size() - posOfPart -1, k=0;//, i = node.keys.size()-posOfPart;
             for (int i = j; i < node.keys.size(); i++) {
                 right.setValue(node.getValue(i), k);
                 k++;
             }
-            node = new Node<T>(this.degree);
-            node.setValue(temp, 0);
-            node.children = new ArrayList<Node<T>>(this.degree+1);
-            node.setChild(left, 0);
-            node.setChild(right, 1);
-            Node<T> tempTop = this.daStack.top;
             this.daStack.pop();
-            partitionNode(tempTop, posOfPart);
-        } */
+            Node<T> tempTop = this.daStack.top;
+            ArrayList<Node<T>> children = node.getChildren();
+            int i=0;
+            while (i<tempTop.keys.size() && tempTop.callComparable(i, temp)<0){
+                i++;
+            }
+            tempTop.setValue(temp, i);
+            
+            left.children = new ArrayList<Node<T>>(0);
+            right.children = new ArrayList<Node<T>>(0);
+            
+            k = 0;
+            for (int l = 0; l < children.size(); l++) {
+                if (l<tempTop.children.get(0).keys.size()+1){
+                    left.children.add(l, children.get(l));
+                }
+                else{
+                    right.children.add(k, children.get(l));
+                    k++;
+                }
+            }
+            tempTop.setChild(left, i);
+            tempTop.setChild(right, i+1);
+            if (tempTop.keys.size()>this.degree){
+                this.partitionNode(tempTop, this.findPosOfPart(tempTop));
+                //this.partitionNode(node, this.findPosOfPart(node));
+            }
+        }
     }
 
 }
